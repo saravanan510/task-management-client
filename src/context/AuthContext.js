@@ -8,7 +8,7 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
-  console.log(userProfile);
+
   const handleLogin = (user) => {
     setUser(user);
   };

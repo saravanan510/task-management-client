@@ -1,14 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import Layout from "./components/Layout";
-import TaskList from "./components/TaskList";
+import Routers from "./Routers";
 import { useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "./context/AuthContext";
-import Account from "./components/Account";
-import PrivateRoutes from "./components/PrivateRoutes";
 
 function App() {
   const { handleLogin, handleProfile } = useAuth();
@@ -42,16 +35,7 @@ function App() {
     }
   }, []);
 
-  return (
-    <Routes>
-      <Route path="/" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/home" element={<Layout />}>
-        <Route path="/home/task" element={<TaskList />} />
-        <Route path="account" element={<Account />} />
-      </Route>
-    </Routes>
-  );
+  return <Routers />;
 }
 
 export default App;

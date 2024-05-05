@@ -58,7 +58,7 @@ const useLogin = () => {
 
         handleProfile(profileResponse.data);
 
-        navigate("/home/task");
+        navigate("/home");
       } catch (err) {
         console.log(err);
         setForm({
