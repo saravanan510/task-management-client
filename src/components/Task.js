@@ -12,20 +12,37 @@ const Task = () => {
   const [task, setTask] = useState([]);
   console.log(task);
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (user && user.role == "Assigner") {
-      (async () => {
-        const tasklist = await axios.get(
-          "http://localhost:4444/assigner/task",
-          {
-            headers: {
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        );
-        setTask(tasklist.data);
-      })();
-    }
+    const fetchData = async () => {
+      try {
+        if (user && user.role === "Assigner") {
+          const response = await axios.get(
+            "http://localhost:4444/assigner/task",
+            {
+              headers: {
+                Authorization: localStorage.getItem("token"),
+              },
+            }
+          );
+          setTask(response.data);
+        } else if (user && user.role === "Assignee") {
+          const response = await axios.get(
+            "http://localhost:4444/assignee/task",
+            {
+              headers: {
+                Authorization: localStorage.getItem("token"),
+              },
+            }
+          );
+
+          setTask(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching task data:", error);
+      }
+    };
+    fetchData();
   }, []);
   return (
     <div>
@@ -80,14 +97,19 @@ const Task = () => {
             ) : (
               <div>
                 <p className="card-title">Assigned by</p>
-                <p className="card-content">{task.assignedBy}</p>
+                <p className="card-content">{task.userId.username}</p>
               </div>
             )}
             <div>
               <p className="card-title">Actions</p>
               <div className="action-icons">
-                <TbEdit style={{ fontSize: "20px", color: "blue" }} />
-                <TbTrash style={{ fontSize: "20px", color: "red" }} />
+                {user && user.role !== "Assignee" && (
+                  <>
+                    <TbEdit style={{ fontSize: "20px", color: "blue" }} />
+                    <TbTrash style={{ fontSize: "20px", color: "red" }} />
+                  </>
+                )}
+
                 <TbEye
                   style={{ fontSize: "20px", color: "purple" }}
                   onClick={() => {
