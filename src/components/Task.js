@@ -1,49 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
+
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import { TbTrash } from "react-icons/tb";
 import { TbEye } from "react-icons/tb";
 
-const Task = () => {
+const Task = ({ task }) => {
   const { user } = useAuth();
-  const [task, setTask] = useState([]);
+
   console.log(task);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (user && user.role === "Assigner") {
-          const response = await axios.get(
-            "http://localhost:4444/assigner/task",
-            {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-          );
-          setTask(response.data);
-        } else if (user && user.role === "Assignee") {
-          const response = await axios.get(
-            "http://localhost:4444/assignee/task",
-            {
-              headers: {
-                Authorization: localStorage.getItem("token"),
-              },
-            }
-          );
-
-          setTask(response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching task data:", error);
-      }
-    };
-    fetchData();
-  }, []);
   return (
     <div>
       {task.map((task, i) => {
